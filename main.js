@@ -18,7 +18,16 @@ function process(nodes) {
                                 parent = parent.parentNode;
                         }
 
-                        parent.remove();
+                        parent?.remove();
                 });
+
+                if (node.href?.includes('start_radio=1')) {
+                        let parent = node.parentNode;
+                        while (parent && parent.id != "content") {
+                                parent = parent.parentNode;
+                        }
+
+                        parent?.remove(); 
+                }
         }
 }
