@@ -10,24 +10,34 @@ const callback = (mutationList, observer) => {
 const observer = new MutationObserver(callback);
 observer.observe(targetNode, config);
 
+const contentIdToRemove = ["content", "dismissible"];
+
 function process(nodes) {
         for (const node of nodes) {
                 node.parentNode?.querySelectorAll('.badge-style-type-verified-artist').forEach(x => {
                         let parent = x.parentNode;
-                        while (parent && parent.id != "content") {
+                        while (parent && !contentIdToRemove.includes(parent.id)) {
                                 parent = parent.parentNode;
                         }
 
-                        parent?.remove();
+                        preventBodyRemoval(parent);
                 });
 
                 if (node.href?.includes('start_radio=1')) {
                         let parent = node.parentNode;
-                        while (parent && parent.id != "content") {
+                        while (parent && !contentIdToRemove.includes(parent.id)) {
                                 parent = parent.parentNode;
                         }
 
-                        parent?.remove(); 
+                        preventBodyRemoval(parent);
                 }
+        }
+}
+
+function preventBodyRemoval(node) {
+        if (node === document.body || node === document)  {
+                // no-op
+        } else {
+                node?.remove();
         }
 }
